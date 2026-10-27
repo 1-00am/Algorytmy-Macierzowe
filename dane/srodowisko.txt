@@ -1,0 +1,9 @@
+Procesor: Intel(R) Core(TM) i5-8400 CPU @ 2.80GHz
+Rdzenie logiczne: 6
+RAM [MB]: 8134
+Limit sterty JVM [MB]: 2034
+System: Windows 10 10.0 amd64
+Java: 25.0.5.0.2+1-LTS
+JVM: OpenJDK 64-Bit Server VM (mixed mode, sharing)
+Kompilator JIT: HotSpot 64-Bit Tiered Compilers
+Parametry: maxN=1000, powtorzenia=3, budzet=3600.0 s, CUTOFF=64

@@ -2,7 +2,8 @@ import java.util.Random;
 
 public final class MatrixMultAlt {
     // Dla n <= CUTOFF liczymy zwyklymi petlami.
-    private static final int CUTOFF = 2;
+    static int CUTOFF = 2;
+    static long flops;
 
     private MatrixMultAlt() {
     }
@@ -20,6 +21,7 @@ public final class MatrixMultAlt {
                                     double[][] b, int br, int bc,
                                     double[][] c, int cr, int cc,
                                     int m, int k, int p) {
+        flops += 2L * m * k * p;
         for (int i = 0; i < m; i++)
             for (int t = 0; t < k; t++)
                 for (int j = 0; j < p; j++)
@@ -66,7 +68,6 @@ public final class MatrixMultAlt {
         return blocks;
     }
 
-    /** Odwrotnosc split: sklada bloki 1..parts*parts w jedna macierz. */
     private static double[][] join(double[][][] blocks, int parts) {
         int h = blocks[1].length, w = blocks[1][0].length;
         double[][] a = new double[parts * h][parts * w];
@@ -77,11 +78,10 @@ public final class MatrixMultAlt {
         return a;
     }
 
-    /** Kombinacja liniowa blokow o tym samym ksztalcie. Liczba w terms to numer bloku,
-     * a jej znak to znak skladnika: lin(x, 1, -4) = x[1] - x[4]. */
     private static double[][] lin(double[][][] blocks, int... terms) {
         int h = blocks[Math.abs(terms[0])].length, w = blocks[Math.abs(terms[0])][0].length;
         double[][] c = new double[h][w];
+        flops += (long) terms.length * h * w;
         for (int term : terms) {
             double[][] b = blocks[Math.abs(term)];
             double sign = term > 0 ? 1 : -1;
@@ -92,7 +92,6 @@ public final class MatrixMultAlt {
         return c;
     }
 
-    /** Dopelnia macierz zerami do rozmiaru rows x cols. */
     private static double[][] pad(double[][] a, int rows, int cols) {
         double[][] b = new double[rows][cols];
         for (int i = 0; i < a.length; i++)
@@ -100,7 +99,6 @@ public final class MatrixMultAlt {
         return b;
     }
 
-    /** Zwraca lewy gorny rog rows x cols. */
     private static double[][] crop(double[][] a, int rows, int cols) {
         double[][] b = new double[rows][cols];
         for (int i = 0; i < rows; i++)
@@ -108,7 +106,6 @@ public final class MatrixMultAlt {
         return b;
     }
 
-    /** Najmniejsza wielokrotnosc parts nie mniejsza niz x. */
     private static int roundUp(int x, int parts) {
         return (x + parts - 1) / parts * parts;
     }
